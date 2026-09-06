@@ -1,0 +1,17 @@
+[package]
+name = "dhcpv6"
+# Local dev. Publish as 0.1.0-beta.1 per adhammer/docs/PLAN_1.5.1.md B-4
+# (optional). Codec ONLY — any spoof/responder logic stays in the consumer
+# per the dual-use rule.
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.88"
+license = "MIT"
+authors = ["zevs"]
+description = "Minimal no-panic DHCPv6 (RFC 8415) message + option codec: encode/parse client-server messages and options. Zero dependencies."
+keywords = ["dhcpv6", "rfc8415", "codec", "ipv6", "network"]
+categories = ["network-programming", "parser-implementations"]
+readme = "README.md"
+
+[dependencies]
+# none — pure std codec, no I/O and no responder logic.
