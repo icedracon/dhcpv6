@@ -5,7 +5,7 @@
 //! themselves — with **zero dependencies** and zero I/O.
 //!
 //! This is a **codec only**: it does not open sockets, and it contains no
-//! responder / spoofing logic. Building a rogue advertiser is the consumer's
+//! agent / spoofing logic. Building a rogue advertiser is the consumer's
 //! job; this crate just turns bytes into structures and back.
 //!
 //! ## Parser safety
@@ -20,43 +20,65 @@
 //! assert_eq!(m.msg_type, msg_type::SOLICIT);
 //! assert_eq!(m.transaction_id, [0xAA, 0xBB, 0xCC]);
 //! ```
+#![deny(missing_docs)]
 
 use std::net::Ipv6Addr;
 
 /// DHCPv6 message types (RFC 8415 §7.3).
 pub mod msg_type {
+    /// Client → server: request configuration parameters.
     pub const SOLICIT: u8 = 1;
+    /// Server → client: response to SOLICIT.
     pub const ADVERTISE: u8 = 2;
+    /// Client → server: request assignment of the ADVERTISEd parameters.
     pub const REQUEST: u8 = 3;
+    /// Client → server: confirm addresses are still valid on the current link.
     pub const CONFIRM: u8 = 4;
+    /// Client → server: extend lifetimes of assigned parameters (T1).
     pub const RENEW: u8 = 5;
+    /// Client → any server: extend lifetimes after failing to RENEW (T2).
     pub const REBIND: u8 = 6;
+    /// Server → client: reply to REQUEST / RENEW / REBIND / RELEASE / etc.
     pub const REPLY: u8 = 7;
+    /// Client → server: release previously assigned addresses.
     pub const RELEASE: u8 = 8;
+    /// Client → server: indicate an address is in use / declined.
     pub const DECLINE: u8 = 9;
+    /// Client → server: request information without address assignment.
     pub const INFORMATION_REQUEST: u8 = 11;
 }
 
 /// Common DHCPv6 option codes (RFC 8415 §21, RFC 3646 for DNS).
 pub mod opt {
+    /// Client Identifier — DUID identifying the client.
     pub const CLIENTID: u16 = 1;
+    /// Server Identifier — DUID identifying the server.
     pub const SERVERID: u16 = 2;
+    /// Identity Association for Non-temporary Addresses.
     pub const IA_NA: u16 = 3;
-    pub const ORO: u16 = 6; // Option Request
+    /// Option Request — options the client wants the server to return.
+    pub const ORO: u16 = 6;
+    /// Elapsed time since the client started the DHCPv6 transaction.
     pub const ELAPSED_TIME: u16 = 8;
+    /// Status code (RFC 8415 §21.13).
     pub const STATUS_CODE: u16 = 13;
+    /// DNS Recursive Name Server list (RFC 3646).
     pub const DNS_SERVERS: u16 = 23;
+    /// Domain Search List (RFC 3646).
     pub const DOMAIN_LIST: u16 = 24;
 }
 
 /// One DHCPv6 option: a 16-bit code and its raw value bytes.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct DhcpOption {
+    /// Option code (see the [`opt`] module for named constants).
     pub code: u16,
+    /// Raw option value bytes.
     pub data: Vec<u8>,
 }
 
 impl DhcpOption {
+    /// Build an option from a code and its raw value bytes.
     pub fn new(code: u16, data: Vec<u8>) -> Self {
         DhcpOption { code, data }
     }
@@ -96,12 +118,16 @@ impl DhcpOption {
 /// A DHCPv6 client/server message.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Message {
+    /// Message type (see the [`msg_type`] module for named constants).
     pub msg_type: u8,
+    /// Transaction id (3 bytes).
     pub transaction_id: [u8; 3],
+    /// Message options.
     pub options: Vec<DhcpOption>,
 }
 
 impl Message {
+    /// Build a message with the given header and options.
     pub fn new(msg_type: u8, transaction_id: [u8; 3], options: Vec<DhcpOption>) -> Self {
         Message {
             msg_type,

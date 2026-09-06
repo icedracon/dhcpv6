@@ -4,7 +4,7 @@ A minimal, no-panic **DHCPv6 (RFC 8415) message + option codec** — encode and
 parse the client/server message form and its option TLVs — with **zero
 dependencies** and zero I/O.
 
-It is a **codec only**: no sockets, no responder, no spoofing logic. Turning
+It is a **codec only**: no sockets, no agent, no spoofing logic. Turning
 these structures into a service (client, server, or otherwise) is the
 consumer's job.
 
