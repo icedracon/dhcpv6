@@ -3,7 +3,7 @@ name = "dhcpv6"
 # Local dev. Publish as 0.1.0-beta.1 per adhammer/docs/PLAN_1.5.1.md B-4
 # (optional). Codec ONLY — any spoof/agent logic stays in the consumer
 # per the dual-use rule.
-version = "0.1.0-beta.2"
+version = "0.1.0-beta.3"
 edition = "2021"
 rust-version = "1.88"
 license = "MIT"

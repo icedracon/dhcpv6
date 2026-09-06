@@ -100,10 +100,12 @@ impl DhcpOption {
             return None;
         }
         let mut out = Vec::new();
-        for chunk in self.data.chunks_exact(16) {
+        let mut i = 0;
+        while i + 16 <= self.data.len() {
             let mut o = [0u8; 16];
-            o.copy_from_slice(chunk);
+            o.copy_from_slice(&self.data[i..i + 16]);
             out.push(Ipv6Addr::from(o));
+            i += 16;
         }
         Some(out)
     }
