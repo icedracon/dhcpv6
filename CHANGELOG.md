@@ -3,6 +3,20 @@
 All notable changes to `dhcpv6` are documented here. Follows
 [Keep a Changelog](https://keepachangelog.com); uses SemVer.
 
+## [0.1.0] — 2026-09-06
+
+First stable release of the RFC 8415 DHCPv6 message + option codec.
+
+### Validated
+- 100k random + mutated inputs — `Message::parse` never panics.
+- Bidirectional interop with `scapy` (an independent DHCPv6 stack): a
+  scapy-generated REPLY parses to the exact fields, and a `dhcpv6`-built
+  SOLICIT decodes cleanly through scapy.
+
+### Future (additive)
+- Relay-Forward / Relay-Reply support will land as a separate message type
+  (additive, non-breaking).
+
 ## [0.1.0-beta.1] â€” unreleased
 
 Initial release. Unstable API (0.x + beta) â€” expect small breaks before 0.1.0.
